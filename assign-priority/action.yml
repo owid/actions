@@ -13,7 +13,7 @@ runs:
       uses: leonsteinhaeuser/project-beta-automations@v1.2.1
       if: github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'priority 1 - essential')
       with:
-        gh_token: ${{ secrets.PROJECT_ISSUES_TOKEN }}
+        gh_token: ${{ env.PROJECT_ISSUES_TOKEN }}
         organization: owid
         project_id: 4
         resource_node_id: ${{ github.event.issue.node_id }}
@@ -23,7 +23,7 @@ runs:
       uses: leonsteinhaeuser/project-beta-automations@v1.2.1
       if: github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'priority 2 - important')
       with:
-        gh_token: ${{ secrets.PROJECT_ISSUES_TOKEN }}
+        gh_token: ${{ env.PROJECT_ISSUES_TOKEN }}
         organization: owid
         project_id: 4
         resource_node_id: ${{ github.event.issue.node_id }}
@@ -33,7 +33,7 @@ runs:
       uses: leonsteinhaeuser/project-beta-automations@v1.2.1
       if: github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'priority 3 - nice to have')
       with:
-        gh_token: ${{ secrets.PROJECT_ISSUES_TOKEN }}
+        gh_token: ${{ env.PROJECT_ISSUES_TOKEN }}
         organization: owid
         project_id: 4
         resource_node_id: ${{ github.event.issue.node_id }}
@@ -43,7 +43,7 @@ runs:
       uses: leonsteinhaeuser/project-beta-automations@v1.2.1
       if: github.event_name == 'issues' && !contains(github.event.issue.labels.*.name, 'priority 1 - essential') && !contains(github.event.issue.labels.*.name, 'priority 2 - important') && !contains(github.event.issue.labels.*.name, 'priority 3 - nice to have')
       with:
-        gh_token: ${{ secrets.PROJECT_ISSUES_TOKEN }}
+        gh_token: ${{ env.PROJECT_ISSUES_TOKEN }}
         organization: owid
         project_id: 4
         resource_node_id: ${{ github.event.issue.node_id }}
