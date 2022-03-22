@@ -8,8 +8,6 @@ env:
 
 runs:
   using: composite
-  name: Sync issue priority to project board
-  runs-on: ubuntu-latest
   steps:
     - name: Assign priority 1
       uses: leonsteinhaeuser/project-beta-automations@v1.2.1
