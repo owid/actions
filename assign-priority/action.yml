@@ -9,6 +9,7 @@ runs:
   using: composite
   steps:
     - name: Set up env variables
+      shell: bash
       run: |
         echo "prio1=1 - essential" >> $GITHUB_ENV
         echo "prio2=2 - important" >> $GITHUB_ENV
