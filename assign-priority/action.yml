@@ -5,15 +5,15 @@ inputs:
     description: "GH token that has write access to the project board"
     required: true
 
-env:
-  prio1: "1 - essential"
-  prio2: "2 - important"
-  prio3: "3 - nice to have"
-  custom_field_value: '[{{\"name\": \"Priority\",\"type\": \"single_select\",\"value\": \"{0}\"}}]'
-
 runs:
   using: composite
   steps:
+    - name: Set up env variables
+      run: |
+        echo "prio1=1 - essential" >> $GITHUB_ENV
+        echo "prio2=2 - important" >> $GITHUB_ENV
+        echo "prio3=3 - nice to have" >> $GITHUB_ENV
+        echo 'custom_field_value=[{{\"name\": \"Priority\",\"type\": \"single_select\",\"value\": \"{0}\"}}]' >> $GITHUB_ENV
     - name: Assign priority 1
       uses: leonsteinhaeuser/project-beta-automations@v1.2.1
       if: github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'priority 1 - essential')
