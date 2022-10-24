@@ -16,7 +16,7 @@ runs:
         echo "in_progress=In Progress" >> $GITHUB_ENV
     - name: Move Engineering issue to ${{ env.todo }}
       if: github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'reopened')
-      uses: leonsteinhaeuser/project-beta-automations@v1.2.1
+      uses: leonsteinhaeuser/project-beta-automations@v2.0.1
       with:
         gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
         organization: owid
@@ -25,7 +25,7 @@ runs:
         status_value: ${{ env.todo }} # Target status
     - name: Move Engineering issue to ${{ env.done }}
       if: github.event_name == 'issues' && github.event.action == 'closed'
-      uses: leonsteinhaeuser/project-beta-automations@v1.2.1
+      uses: leonsteinhaeuser/project-beta-automations@v2.0.1
       with:
         gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
         organization: owid
@@ -34,7 +34,7 @@ runs:
         status_value: ${{ env.done }} # Target status
     - name: Move Engineering PR to ${{ env.in_progress }}
       if: github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'reopened' || github.event.action == 'review_requested')
-      uses: leonsteinhaeuser/project-beta-automations@v1.2.1
+      uses: leonsteinhaeuser/project-beta-automations@v2.0.1
       with:
         gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
         organization: owid
@@ -43,7 +43,7 @@ runs:
         status_value: ${{ env.in_progress }} # Target status
     - name: Move Engineering PR to ${{ env.done }}
       if: github.event_name == 'pull_request' && github.event.action == 'closed'
-      uses: leonsteinhaeuser/project-beta-automations@v1.2.1
+      uses: leonsteinhaeuser/project-beta-automations@v2.0.1
       with:
         gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
         organization: owid
@@ -52,7 +52,7 @@ runs:
         status_value: ${{ env.done }} # Target status
     - name: Move Overview issue to ${{ env.todo }}
       if: github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'reopened')
-      uses: leonsteinhaeuser/project-beta-automations@v1.2.1
+      uses: leonsteinhaeuser/project-beta-automations@v2.0.1
       with:
         gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
         organization: owid
@@ -61,7 +61,7 @@ runs:
         status_value: ${{ env.todo }} # Target status
     - name: Move Overview issue to ${{ env.done }}
       if: github.event_name == 'issues' && github.event.action == 'closed'
-      uses: leonsteinhaeuser/project-beta-automations@v1.2.1
+      uses: leonsteinhaeuser/project-beta-automations@v2.0.1
       with:
         gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
         organization: owid
