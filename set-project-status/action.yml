@@ -14,6 +14,7 @@ runs:
         echo "todo=Todo" >> $GITHUB_ENV
         echo "done=Done" >> $GITHUB_ENV
         echo "in_progress=In Progress" >> $GITHUB_ENV
+        echo "blocked=Blocked" >> $GITHUB_ENV
     - name: Move Engineering issue to ${{ env.todo }}
       if: github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'reopened')
       uses: leonsteinhaeuser/project-beta-automations@v2.0.1
@@ -32,8 +33,8 @@ runs:
         project_id: 4
         resource_node_id: ${{ github.event.issue.node_id }}
         status_value: ${{ env.done }} # Target status
-    - name: Move Engineering PR to ${{ env.in_progress }}
-      if: github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'reopened' || github.event.action == 'review_requested')
+    - name: Move Engineering PR to ${{ env.in_progress }} and current cycle
+      if: github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'reopened')
       uses: leonsteinhaeuser/project-beta-automations@v2.0.1
       with:
         gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
@@ -41,6 +42,17 @@ runs:
         project_id: 4
         resource_node_id: ${{ github.event.pull_request.node_id }}
         status_value: ${{ env.in_progress }} # Target status
+        custom_field_values: '[{\"name\": \"Cycle\",\"type\": \"iteration\",\"value\": \"@current\"}]'
+    - name: Move Engineering PR to ${{ env.blocked }} and current cycle
+      if: github.event_name == 'pull_request' && github.event.action == 'review_requested'
+      uses: leonsteinhaeuser/project-beta-automations@v2.0.1
+      with:
+        gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
+        organization: owid
+        project_id: 4
+        resource_node_id: ${{ github.event.pull_request.node_id }}
+        status_value: ${{ env.blocked }} # Target status
+        custom_field_values: '[{\"name\": \"Cycle\",\"type\": \"iteration\",\"value\": \"@current\"}]'
     - name: Move Engineering PR to ${{ env.done }}
       if: github.event_name == 'pull_request' && github.event.action == 'closed'
       uses: leonsteinhaeuser/project-beta-automations@v2.0.1
