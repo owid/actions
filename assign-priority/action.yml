@@ -11,13 +11,13 @@ runs:
     - name: Set up env variables
       shell: bash
       run: |
-        echo "prio1=1 - essential" >> $GITHUB_ENV
-        echo "prio2=2 - important" >> $GITHUB_ENV
-        echo "prio3=3 - nice to have" >> $GITHUB_ENV
+        echo "prio1=1 - high" >> $GITHUB_ENV
+        echo "prio2=2 - medium" >> $GITHUB_ENV
+        echo "prio3=3 - low" >> $GITHUB_ENV
         echo 'custom_field_value=[{{\"name\": \"Priority\",\"type\": \"single_select\",\"value\": \"{0}\"}}]' >> $GITHUB_ENV
     - name: Assign priority 1
       uses: leonsteinhaeuser/project-beta-automations@v2.0.1
-      if: github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'priority 1 - essential')
+      if: github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'priority 1 - high')
       with:
         gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
         organization: owid
@@ -27,7 +27,7 @@ runs:
         custom_field_values: ${{ format(env.custom_field_value, env.prio1) }}
     - name: Assign priority 2
       uses: leonsteinhaeuser/project-beta-automations@v2.0.1
-      if: github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'priority 2 - important')
+      if: github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'priority 2 - medium')
       with:
         gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
         organization: owid
@@ -37,7 +37,7 @@ runs:
         custom_field_values: ${{ format(env.custom_field_value, env.prio2) }}
     - name: Assign priority 3
       uses: leonsteinhaeuser/project-beta-automations@v2.0.1
-      if: github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'priority 3 - nice to have')
+      if: github.event_name == 'issues' && contains(github.event.issue.labels.*.name, 'priority 3 - low')
       with:
         gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
         organization: owid
@@ -47,7 +47,7 @@ runs:
         custom_field_values: ${{ format(env.custom_field_value, env.prio3) }}
     - name: Assign priority none
       uses: leonsteinhaeuser/project-beta-automations@v2.0.1
-      if: github.event_name == 'issues' && !contains(github.event.issue.labels.*.name, 'priority 1 - essential') && !contains(github.event.issue.labels.*.name, 'priority 2 - important') && !contains(github.event.issue.labels.*.name, 'priority 3 - nice to have')
+      if: github.event_name == 'issues' && !contains(github.event.issue.labels.*.name, 'priority 1 - high') && !contains(github.event.issue.labels.*.name, 'priority 2 - medium') && !contains(github.event.issue.labels.*.name, 'priority 3 - low')
       with:
         gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
         organization: owid
