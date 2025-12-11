@@ -35,7 +35,7 @@ runs:
         echo "done=${{ inputs.STATUS_DONE }}" >> $GITHUB_ENV
         echo "in_progress=${{ inputs.STATUS_IN_PROGRESS }}" >> $GITHUB_ENV
         echo "blocked=${{ inputs.STATUS_BLOCKED }}" >> $GITHUB_ENV
-    - name: Move Engineering issue to ${{ env.todo }}
+    - name: Move issue to ${{ env.todo }}
       if: github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'reopened')
       uses: leonsteinhaeuser/project-beta-automations@v2.1.0
       with:
@@ -44,7 +44,7 @@ runs:
         project_id: ${{ inputs.PROJECT_ID }}
         resource_node_id: ${{ github.event.issue.node_id }}
         status_value: ${{ env.todo }} # Target status
-    - name: Move Engineering issue to ${{ env.done }}
+    - name: Move issue to ${{ env.done }}
       if: github.event_name == 'issues' && github.event.action == 'closed'
       uses: leonsteinhaeuser/project-beta-automations@v2.1.0
       with:
@@ -53,7 +53,7 @@ runs:
         project_id: ${{ inputs.PROJECT_ID }}
         resource_node_id: ${{ github.event.issue.node_id }}
         status_value: ${{ env.done }} # Target status
-    - name: Move Engineering PR to ${{ env.in_progress }} and current cycle
+    - name: Move PR to ${{ env.in_progress }} and current cycle
       if: github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'reopened')
       uses: leonsteinhaeuser/project-beta-automations@v2.1.0
       with:
@@ -63,7 +63,7 @@ runs:
         resource_node_id: ${{ github.event.pull_request.node_id }}
         status_value: ${{ env.in_progress }} # Target status
         custom_field_values: '[{\"name\": \"Cycle\",\"type\": \"iteration\",\"value\": \"@current\"}]'
-    - name: Move Engineering PR to ${{ env.blocked }} and current cycle
+    - name: Move PR to ${{ env.blocked }} and current cycle
       if: github.event_name == 'pull_request' && github.event.action == 'review_requested'
       uses: leonsteinhaeuser/project-beta-automations@v2.1.0
       with:
@@ -73,7 +73,7 @@ runs:
         resource_node_id: ${{ github.event.pull_request.node_id }}
         status_value: ${{ env.blocked }} # Target status
         custom_field_values: '[{\"name\": \"Cycle\",\"type\": \"iteration\",\"value\": \"@current\"}]'
-    - name: Move Engineering PR to ${{ env.done }}
+    - name: Move PR to ${{ env.done }}
       if: github.event_name == 'pull_request' && github.event.action == 'closed'
       uses: leonsteinhaeuser/project-beta-automations@v2.1.0
       with:
