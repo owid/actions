@@ -4,6 +4,26 @@ inputs:
   PROJECT_ISSUES_TOKEN:
     description: "GH token that has write access to the project board"
     required: true
+  project_id:
+    description: "Project ID number"
+    required: false
+    default: "4"
+  status_todo:
+    description: "Status name for todo items"
+    required: false
+    default: "Todo"
+  status_done:
+    description: "Status name for done items"
+    required: false
+    default: "Done"
+  status_in_progress:
+    description: "Status name for in progress items"
+    required: false
+    default: "In Progress"
+  status_blocked:
+    description: "Status name for blocked items"
+    required: false
+    default: "Blocked"
 
 runs:
   using: composite
@@ -11,17 +31,17 @@ runs:
     - name: Set up env variables
       shell: bash
       run: |
-        echo "todo=Todo" >> $GITHUB_ENV
-        echo "done=Done" >> $GITHUB_ENV
-        echo "in_progress=In Progress" >> $GITHUB_ENV
-        echo "blocked=Blocked" >> $GITHUB_ENV
+        echo "todo=${{ inputs.status_todo }}" >> $GITHUB_ENV
+        echo "done=${{ inputs.status_done }}" >> $GITHUB_ENV
+        echo "in_progress=${{ inputs.status_in_progress }}" >> $GITHUB_ENV
+        echo "blocked=${{ inputs.status_blocked }}" >> $GITHUB_ENV
     - name: Move Engineering issue to ${{ env.todo }}
       if: github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'reopened')
       uses: leonsteinhaeuser/project-beta-automations@v2.1.0
       with:
         gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
         organization: owid
-        project_id: 4
+        project_id: ${{ inputs.project_id }}
         resource_node_id: ${{ github.event.issue.node_id }}
         status_value: ${{ env.todo }} # Target status
     - name: Move Engineering issue to ${{ env.done }}
@@ -30,7 +50,7 @@ runs:
       with:
         gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
         organization: owid
-        project_id: 4
+        project_id: ${{ inputs.project_id }}
         resource_node_id: ${{ github.event.issue.node_id }}
         status_value: ${{ env.done }} # Target status
     - name: Move Engineering PR to ${{ env.in_progress }} and current cycle
@@ -39,7 +59,7 @@ runs:
       with:
         gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
         organization: owid
-        project_id: 4
+        project_id: ${{ inputs.project_id }}
         resource_node_id: ${{ github.event.pull_request.node_id }}
         status_value: ${{ env.in_progress }} # Target status
         custom_field_values: '[{\"name\": \"Cycle\",\"type\": \"iteration\",\"value\": \"@current\"}]'
@@ -49,7 +69,7 @@ runs:
       with:
         gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
         organization: owid
-        project_id: 4
+        project_id: ${{ inputs.project_id }}
         resource_node_id: ${{ github.event.pull_request.node_id }}
         status_value: ${{ env.blocked }} # Target status
         custom_field_values: '[{\"name\": \"Cycle\",\"type\": \"iteration\",\"value\": \"@current\"}]'
@@ -59,6 +79,6 @@ runs:
       with:
         gh_token: ${{ inputs.PROJECT_ISSUES_TOKEN }}
         organization: owid
-        project_id: 4
+        project_id: ${{ inputs.project_id }}
         resource_node_id: ${{ github.event.pull_request.node_id }}
         status_value: ${{ env.done }} # Target status
