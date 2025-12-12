@@ -28,14 +28,8 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Set up env variables
-      shell: bash
-      run: |
-        echo "todo=${{ inputs.STATUS_TODO }}" >> $GITHUB_ENV
-        echo "done=${{ inputs.STATUS_DONE }}" >> $GITHUB_ENV
-        echo "in_progress=${{ inputs.STATUS_IN_PROGRESS }}" >> $GITHUB_ENV
-        echo "blocked=${{ inputs.STATUS_BLOCKED }}" >> $GITHUB_ENV
-    - name: Move issue to ${{ env.todo }}
+    # Issues
+    - name: Move issue to ${{ inputs.STATUS_TODO }}
       if: github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'reopened')
       uses: leonsteinhaeuser/project-beta-automations@v2.1.0
       with:
@@ -43,8 +37,8 @@ runs:
         organization: owid
         project_id: ${{ inputs.PROJECT_ID }}
         resource_node_id: ${{ github.event.issue.node_id }}
-        status_value: ${{ env.todo }} # Target status
-    - name: Move issue to ${{ env.done }}
+        status_value: ${{ inputs.STATUS_TODO }} # Target status
+    - name: Move issue to ${{ inputs.STATUS_DONE }}
       if: github.event_name == 'issues' && github.event.action == 'closed'
       uses: leonsteinhaeuser/project-beta-automations@v2.1.0
       with:
@@ -52,8 +46,10 @@ runs:
         organization: owid
         project_id: ${{ inputs.PROJECT_ID }}
         resource_node_id: ${{ github.event.issue.node_id }}
-        status_value: ${{ env.done }} # Target status
-    - name: Move PR to ${{ env.in_progress }} and current cycle
+        status_value: ${{ inputs.STATUS_DONE }} # Target status
+
+    # PRs
+    - name: Move PR to ${{ inputs.STATUS_IN_PROGRESS }} and current cycle
       if: github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'reopened')
       uses: leonsteinhaeuser/project-beta-automations@v2.1.0
       with:
@@ -61,9 +57,9 @@ runs:
         organization: owid
         project_id: ${{ inputs.PROJECT_ID }}
         resource_node_id: ${{ github.event.pull_request.node_id }}
-        status_value: ${{ env.in_progress }} # Target status
+        status_value: ${{ inputs.STATUS_IN_PROGRESS }} # Target status
         custom_field_values: '[{\"name\": \"Cycle\",\"type\": \"iteration\",\"value\": \"@current\"}]'
-    - name: Move PR to ${{ env.blocked }} and current cycle
+    - name: Move PR to ${{ inputs.STATUS_BLOCKED }} and current cycle
       if: github.event_name == 'pull_request' && github.event.action == 'review_requested'
       uses: leonsteinhaeuser/project-beta-automations@v2.1.0
       with:
@@ -71,9 +67,9 @@ runs:
         organization: owid
         project_id: ${{ inputs.PROJECT_ID }}
         resource_node_id: ${{ github.event.pull_request.node_id }}
-        status_value: ${{ env.blocked }} # Target status
+        status_value: ${{ inputs.STATUS_BLOCKED }} # Target status
         custom_field_values: '[{\"name\": \"Cycle\",\"type\": \"iteration\",\"value\": \"@current\"}]'
-    - name: Move PR to ${{ env.done }}
+    - name: Move PR to ${{ inputs.STATUS_DONE }}
       if: github.event_name == 'pull_request' && github.event.action == 'closed'
       uses: leonsteinhaeuser/project-beta-automations@v2.1.0
       with:
@@ -81,4 +77,4 @@ runs:
         organization: owid
         project_id: ${{ inputs.PROJECT_ID }}
         resource_node_id: ${{ github.event.pull_request.node_id }}
-        status_value: ${{ env.done }} # Target status
+        status_value: ${{ inputs.STATUS_DONE }} # Target status
